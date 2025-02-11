@@ -12,8 +12,9 @@ public class Main {
         scanner.close();
 
         try {
-            ListDirectory listDirectory = new ListDirectory(relativePath);
-            listDirectory.listFiles();
+            ManageDirectory manageDirectory = new ManageDirectory(relativePath);
+            manageDirectory.listFiles();
+            System.out.println("\n Contenido guardado en 'directoryContent.txt'");
         } catch (IllegalArgumentException e) {
             System.out.println("Error: " + e.getMessage());
         }
