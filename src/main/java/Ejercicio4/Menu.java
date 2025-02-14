@@ -1,9 +1,10 @@
 package Ejercicio4;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class Menu {
-    private final ManageDirectory manageDirectory;
+    private ManageDirectory manageDirectory;
     private final Scanner input;
 
     public Menu(ManageDirectory manageDirectory, Scanner input) {
@@ -18,30 +19,45 @@ public class Menu {
         int option = input.nextInt();
         input.nextLine();
 
+
         switch (option) {
 
             case 1:
                 try {
-                    System.out.print("Ingresa la ruta relativa del directorio: ***Ejemplo: ..\\S103-Collections-Nivel1*** \n");
+                    System.out.println("\nIngresa la ruta relativa del directorio que quieres listar: \n");
                     String relativePath = input.nextLine();
                     ManageDirectory manageDirectory = new ManageDirectory(relativePath);
-                    manageDirectory.listFiles();
-                    System.out.println("\n Contenido guardado en 'directoryContent.txt'");
+                    System.out.print("Ingresa la ruta y el nombre del archivo donde deseas guardar el contenido (.txt): \n");
+                    String path = input.nextLine();
+                    for (String content : manageDirectory.listFiles()) {
+                        System.out.println(content);
+                        manageDirectory.saveDirectoryContentInTxt(path, content);
+                    }
+
+                    System.out.println("\n Contenido guardado en: " + path);
                 } catch (IllegalArgumentException e) {
                     System.out.println("Error: " + e.getMessage());
                 }
+
                 break;
 
             case 2:
 
-                ManageDirectory manageDirectory = new ManageDirectory();
                 System.out.println("\nIngrese la ruta del directorio a Leer: \n");
                 String filePath = input.nextLine();
-                manageDirectory.readFile(filePath);
+
+                try {
+                    List<String> fileContents = manageDirectory.readFile(filePath);
+                    for (String line : fileContents) {
+                        System.out.println(line);
+                    }
+                } catch (Exception e) {
+                    System.out.println("Error: " + e.getMessage());
+                }
                 break;
 
             default:
-                System.out.println("Opcion invalida");
+                System.out.println("Opción invalida");
         }
     }
 

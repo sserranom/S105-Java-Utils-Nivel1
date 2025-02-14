@@ -1,21 +1,27 @@
 package Ejercicio2;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
 
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Ingresa la ruta relativa del directorio: ***Ejemplo: ..\\S103-Collections-Nivel1*** \n");
-        String relativePath = scanner.nextLine();
-        scanner.close();
+        Scanner input = new Scanner(System.in);
+        System.out.println("\n*******LISTA UN ARBOL DE DIRECTORIO CON EL CONTENIDO DE TODOS SUS NIVELES*******\n");
+        System.out.print("Ingresa la ruta relativa del directorio: \n");
+        String relativePath = input.nextLine();
+        input.close();
 
         try {
             ListDirectory listDirectory = new ListDirectory(relativePath);
-            listDirectory.listFiles();
-        } catch (IllegalArgumentException e) {
-            System.out.println("Error: " + e.getMessage());
-        }
+            List<String> contents = listDirectory.listFiles();
+            for (String listContent : contents){
+                System.out.println(listContent);
+            }
+
+       } catch (Exception e) {
+           System.out.println("Error: " + e.getMessage());
+       }
 
     }
 }

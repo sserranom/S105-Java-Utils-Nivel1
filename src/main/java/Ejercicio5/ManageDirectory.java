@@ -2,12 +2,18 @@ package Ejercicio5;
 
 import java.io.*;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.*;
 
-public class ManageDirectory {
+public class ManageDirectory implements Serializable {
 
+    private static final long serialVersionUID = 691435423235927464L;
     private File directory;
-    private static final String FILE_NAME = "directoryContent.txt";
+    private String fileName;
+    private String content;
+    List<String> filesList;
+
 
     public ManageDirectory(String pathDirectory) {
         this.directory = Paths.get(System.getProperty("user.dir"), pathDirectory).toAbsolutePath().normalize().toFile();
@@ -15,71 +21,103 @@ public class ManageDirectory {
         if (!directory.isDirectory()) {
             throw new IllegalArgumentException("La ruta no es Válida " + pathDirectory);
         }
+        this.filesList = listFiles();
     }
+
 
     public ManageDirectory() {
-
+        this.filesList = new ArrayList<>();
     }
 
-    public void listFiles() {
-
-        boolean fileExists = new File(FILE_NAME).exists();
-        listFilesRecursive(directory, 0, !fileExists);
+    public String getFileName() {
+        return fileName;
     }
 
-    private void listFilesRecursive(File dir, int level, boolean firstWrite) {
+    public String getContent() {
+        return content;
+    }
+
+    public List<String> listFiles() {
+
+        return listFilesRecursive(directory, 0);
+    }
+
+    private List<String> listFilesRecursive(File dir, int level) {
+        List<String> fileList = new ArrayList<>();
         String[] directoryContent = dir.list();
 
         if (directoryContent == null || directoryContent.length == 0) {
-            System.out.println("    ".repeat(level) + "[Vacío] " + dir.getName());
-            return;
+            fileList.add("  ".repeat(level) + "[Vacío] " + dir.getName());
+            return fileList;
         }
 
         Arrays.sort(directoryContent);
 
         for (String content : directoryContent) {
             File subFile = new File(dir, content);
-            String line = ("    ".repeat(level) + (subFile.isDirectory() ? "(D)" : "(F) ") + content);
-            System.out.println(line);
-            saveDirectoryContentInTxt(line, firstWrite);
+            String fileType = subFile.isDirectory() ? "(D) " : "(F) ";
+            fileList.add("  ".repeat(level) + fileType + content);
 
             if (subFile.isDirectory()) {
-                listFilesRecursive(subFile, level + 1, false);
+                fileList.addAll(listFilesRecursive(subFile, level + 1));
             }
         }
+        return fileList;
     }
 
-    private void saveDirectoryContentInTxt(String directoryTxt, boolean firstWrite) {
-
-        try (FileWriter writer = new FileWriter(FILE_NAME, !firstWrite)) {
-            if (firstWrite) {
-                writer.write("*******Contenido del Fichero*******\n\n");
-
-            }
-            writer.write(directoryTxt + "\n");
-        } catch (IOException e) {
-            System.err.println("Error al escribir en el archivo: " + e.getMessage());
-        }
-
-    }
-
-    public void readFile(String filePath) {
-
+    public void saveDirectoryContentInTxt(String filePath, String content) {
         File file = new File(filePath);
+        boolean exists = file.exists();
+
+        try (FileWriter writer = new FileWriter(file, true)) {
+            if (!exists) {
+                writer.write("*******Contenido del Fichero*******\n\n");
+            }
+            writer.write(content + "\n");
+        } catch (IOException e) {
+            throw new RuntimeException("Error al escribir en el archivo: " + e.getMessage(), e);
+        }
+    }
+
+    public List<String> readFile(String filePath) {
+        File file = new File(filePath);
+        List<String> fileContents = new ArrayList<>();
 
         if (!file.exists() || !file.isFile()) {
-            System.err.println("Error: El archivo no existe o la ruta es incorrecta.");
-            return;
+            throw new IllegalArgumentException("El archivo no existe o la ruta es incorrecta.");
         }
 
         try (BufferedReader read = new BufferedReader(new FileReader(filePath))) {
             String line;
-            System.out.println("Contenido del archivo " + filePath + ":");
             while ((line = read.readLine()) != null) {
-                System.out.println(line);
+                fileContents.add(line);
             }
         } catch (IOException e) {
-            System.err.println("Error al leer el archivo: " + e.getMessage());
+            throw new RuntimeException("Error al leer el archivo: " + e.getMessage());
+        }
+
+        return fileContents;
+    }
+
+    public void serializeFile(String directoryPath, String destinationFilePath) {
+
+        ManageDirectory directoryToSerialize = new ManageDirectory(directoryPath);
+
+        List<String> sortedFilesList = directoryToSerialize.listFiles();
+        sortedFilesList.sort(String::compareTo);
+        directoryToSerialize.filesList = sortedFilesList;
+
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(destinationFilePath))) {
+            oos.writeObject(directoryToSerialize);
+        } catch (IOException e) {
+            throw new RuntimeException("Error al serializar el objeto: " + e.getMessage(), e);
+        }
+    }
+
+
+    public ManageDirectory deserializeFile(String filePath) throws IOException, ClassNotFoundException {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filePath))) {
+            return (ManageDirectory) ois.readObject();
         }
     }
 }

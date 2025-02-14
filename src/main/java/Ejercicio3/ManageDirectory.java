@@ -3,61 +3,64 @@ package Ejercicio3;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.io.FileWriter;
+import java.util.List;
 
 public class ManageDirectory {
 
-    private File directory;
-    private static final String FILE_NAME = "directoryContent.txt";
-    private boolean firstWrite = true;
+    private final File DIRECTORY;
+
 
     public ManageDirectory(String pathDirectory) {
-        this.directory = Paths.get(System.getProperty("user.dir"), pathDirectory).toAbsolutePath().normalize().toFile();
+        this.DIRECTORY = Paths.get(System.getProperty("user.dir"), pathDirectory).toAbsolutePath().normalize().toFile();
 
-        if (!directory.isDirectory()) {
+        if (!DIRECTORY.isDirectory()) {
             throw new IllegalArgumentException("La ruta no es Válida" + pathDirectory);
         }
     }
 
-    public void listFiles() {
+    public List<String> listFiles() {
 
-        listFilesRecursive(directory, 0);
+        return listFilesRecursive(DIRECTORY, 0);
+
     }
 
-    private void listFilesRecursive(File dir, int level) {
+    private List<String> listFilesRecursive(File dir, int level) {
+        List<String> fileList = new ArrayList<>();
         String[] directoryContent = dir.list();
 
         if (directoryContent == null || directoryContent.length == 0) {
-            System.out.println("    ".repeat(level) + "[Vacío] " + dir.getName());
-            return;
+            fileList.add("  ".repeat(level) + "[Vacío] " + dir.getName());
+            return fileList;
         }
 
         Arrays.sort(directoryContent);
 
         for (String content : directoryContent) {
             File subFile = new File(dir, content);
-            String line = ("    ".repeat(level) + (subFile.isDirectory() ? "(D)" : "(F) ") + content);
-            System.out.println(line);
-            saveDirectoryContentInTxt(line);
+            String fileType = subFile.isDirectory() ? "(D) " : "(F) ";
+            fileList.add("  ".repeat(level) + fileType + content);
 
             if (subFile.isDirectory()) {
-                listFilesRecursive(subFile, level + 1);
+                fileList.addAll(listFilesRecursive(subFile, level + 1));
             }
         }
+        return fileList;
     }
 
-    private void saveDirectoryContentInTxt(String directoryTxt) {
+    public void saveDirectoryContentInTxt(String filePath, String content) {
+        File file = new File(filePath);
+        boolean exists = file.exists();
 
-        try (FileWriter writer = new FileWriter(FILE_NAME, !firstWrite)) {
-            if (firstWrite){
+        try (FileWriter writer = new FileWriter(file, true)) {
+            if (!exists) {
                 writer.write("*******Contenido del Fichero*******\n\n");
-                firstWrite= false;
             }
-            writer.write(directoryTxt + "\n");
+            writer.write(content + "\n");
         } catch (IOException e) {
-            System.err.println("Error al escribir en el archivo: " + e.getMessage());
+            throw new RuntimeException("Error al escribir en el archivo: " + e.getMessage(), e);
         }
-
     }
 }
