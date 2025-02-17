@@ -38,7 +38,7 @@ Este proyecto está destinado principalmente a pruebas unitarias y no tiene un c
 1. Abre una terminal o línea de comandos.
 2. Navega al directorio `src/main/java/Ejercicio5` o cualquiera de los otros ejercicios dentro del proyecto.
 3. Compila los archivos `.java` utilizando los  siguiente comando:
-      - javac -d *.java
+      - javac *.java
       - java Main java
 4. el programa te mostrara el menu de opciones puedes elegir.
 
