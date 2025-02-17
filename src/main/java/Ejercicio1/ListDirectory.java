@@ -9,7 +9,7 @@ public class ListDirectory {
     private final File DIRECTORY;
 
     public ListDirectory(String pathDirectory) {
-        this.DIRECTORY = new File(System.getProperty("user.dir") + File.separator + pathDirectory);
+        this.DIRECTORY = new File(pathDirectory);
 
         if (!DIRECTORY.isDirectory()) {
             throw new IllegalArgumentException("La ruta no es Válida");

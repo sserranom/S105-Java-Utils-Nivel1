@@ -7,7 +7,7 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("\n*******LISTA EL CONTENIDO DE UN DIRECTORIO*******\n");
-        System.out.print("Ingresa la ruta relativa del directorio que desa listar: \n");
+        System.out.print("Ingresa la ruta del directorio que desa listar: \n");
         String relativePath = scanner.nextLine();
         scanner.close();
 

@@ -16,7 +16,7 @@ public class ManageDirectory implements Serializable {
 
 
     public ManageDirectory(String pathDirectory) {
-        this.directory = Paths.get(System.getProperty("user.dir"), pathDirectory).toAbsolutePath().normalize().toFile();
+        this.directory = new File(pathDirectory);
 
         if (!directory.isDirectory()) {
             throw new IllegalArgumentException("La ruta no es Válida " + pathDirectory);

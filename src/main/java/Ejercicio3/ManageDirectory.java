@@ -14,7 +14,7 @@ public class ManageDirectory {
 
 
     public ManageDirectory(String pathDirectory) {
-        this.DIRECTORY = Paths.get(System.getProperty("user.dir"), pathDirectory).toAbsolutePath().normalize().toFile();
+        this.DIRECTORY = new File(pathDirectory);
 
         if (!DIRECTORY.isDirectory()) {
             throw new IllegalArgumentException("La ruta no es Válida" + pathDirectory);

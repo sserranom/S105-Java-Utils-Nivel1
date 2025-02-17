@@ -16,7 +16,7 @@ public class Menu {
         System.out.println("\n******Elije la Operacion que deseas Realizar:*******\n ");
         System.out.println("1. Listar un Directorio. \n" +
                 "2. Leer un archiv.txt.\n" +
-                "3. Serializar un Archivo.\n" +
+                "3. Serializar un Objeto.\n" +
                 "4. Desserializar un archivo. \n");
 
         int option = input.nextInt();
@@ -26,7 +26,7 @@ public class Menu {
 
             case 1:
                 try {
-                    System.out.println("\nIngresa la ruta relativa del directorio que quieres listar: \n");
+                    System.out.println("\nIngresa la ruta del directorio que quieres listar: \n");
                     relativePath = input.nextLine();
                     ManageDirectory manageDirectory = new ManageDirectory(relativePath);
                     System.out.print("Ingresa la ruta y el nombre del archivo donde deseas guardar el contenido (.txt): \n");
@@ -59,7 +59,8 @@ public class Menu {
 
             case 3:
 
-                System.out.println("Ingrese la ruta del directorio: \n");
+                System.out.println("*****SERIALIZA UN OBJETO DE LA CLASE ManageDirectory, (Se lista el directorio y se guardara como un archivo.ser)***** \n" +
+                        "Ingrese la ruta del directorio:  \n");
                 String originFilePath = input.nextLine();
                 System.out.println("Ingrese la ruta y nombre donde guardar el Objeto serializado: \n");
                 String destinationFilePath = input.nextLine();

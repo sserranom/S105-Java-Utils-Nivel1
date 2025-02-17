@@ -24,7 +24,7 @@ public class Menu {
 
             case 1:
                 try {
-                    System.out.println("\nIngresa la ruta relativa del directorio que quieres listar: \n");
+                    System.out.println("\nIngresa la ruta del directorio que quieres listar: \n");
                     String relativePath = input.nextLine();
                     ManageDirectory manageDirectory = new ManageDirectory(relativePath);
                     System.out.print("Ingresa la ruta y el nombre del archivo donde deseas guardar el contenido (.txt): \n");
@@ -43,7 +43,7 @@ public class Menu {
 
             case 2:
 
-                System.out.println("\nIngrese la ruta del directorio a Leer: \n");
+                System.out.println("\nIngrese la ruta del archivo que desea Leer: \n");
                 String filePath = input.nextLine();
 
                 try {

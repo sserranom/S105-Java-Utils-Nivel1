@@ -7,7 +7,7 @@ public class Main {
 
         Scanner input = new Scanner(System.in);
         System.out.println("\n *******LISTA UN ARBOL CON EL CONTENIDO DE TODOS SUS SUBNIVELES Y LOS GUARDA EN UN ARCHIVO .TXT*******\n");
-        System.out.print("Ingresa la ruta relativa del directorio: \n");
+        System.out.print("Ingresa la ruta del directorio que desea listar: \n");
         String relativePath = input.nextLine();
 
 

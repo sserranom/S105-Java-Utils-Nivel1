@@ -8,7 +8,7 @@ public class Main {
 
         Scanner input = new Scanner(System.in);
         System.out.println("\n*******LISTA UN ARBOL DE DIRECTORIO CON EL CONTENIDO DE TODOS SUS NIVELES*******\n");
-        System.out.print("Ingresa la ruta relativa del directorio: \n");
+        System.out.print("Ingresa la ruta del directorio que desea listar: \n");
         String relativePath = input.nextLine();
         input.close();
 
