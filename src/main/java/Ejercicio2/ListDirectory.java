@@ -11,7 +11,7 @@ public class ListDirectory {
     private final File DIRECTORY;
 
     public ListDirectory(String pathDirectory) {
-        this.DIRECTORY = Paths.get(System.getProperty("user.dir"), pathDirectory).toAbsolutePath().normalize().toFile();
+        this.DIRECTORY = new File(pathDirectory);
 
         if (!DIRECTORY.isDirectory()) {
             throw new IllegalArgumentException("La ruta no es Válida" + pathDirectory);
